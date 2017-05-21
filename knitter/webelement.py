@@ -13,8 +13,8 @@ try:
     from knitter import log
 except ImportError:
     # Python 2
-    import env
-    import log
+    from . import env
+    from . import log
 
 class compatiblemethod(object):
     """If the first argument(cls) is a class, set/use properties of the class. If the 
@@ -62,12 +62,12 @@ class WebBrowser:
     
     @compatiblemethod
     def ScrollTo(cls, x, y):
-        log.step_normal(u"Element [%s]: Scroll To [%s, %s]" % (cls.__name__, x, y))
+        log.step_normal("Element [%s]: Scroll To [%s, %s]" % (cls.__name__, x, y))
         env.threadlocal.BROWSER.execute_script("window.scrollTo(%s, %s);" % (x, y))
     
     @compatiblemethod
     def Refresh(cls, times=4):
-        log.step_normal(u"Element [%s]: Browser Refresh" % (cls.__name__,))
+        log.step_normal("Element [%s]: Browser Refresh" % (cls.__name__,))
         
         for i in range(times):
             action = webdriver.ActionChains(env.threadlocal.BROWSER)
@@ -78,7 +78,7 @@ class WebBrowser:
     
     @compatiblemethod
     def DeleteAllCookies(cls):
-        log.step_normal(u"Element [%s]: Browser Delete All Cookies" % (cls.__name__,))
+        log.step_normal("Element [%s]: Browser Delete All Cookies" % (cls.__name__,))
         env.threadlocal.BROWSER.delete_all_cookies()
         
         time.sleep(3)
@@ -86,7 +86,7 @@ class WebBrowser:
     
     @compatiblemethod
     def NavigateTo(cls, url):
-        log.step_normal(u"Element [%s]: Navigate To [%s]" % (cls.__name__, url))
+        log.step_normal("Element [%s]: Navigate To [%s]" % (cls.__name__, url))
         env.threadlocal.BROWSER.get(url)
         
         time.sleep(3)
@@ -227,7 +227,7 @@ class WebElement:
     
     @compatiblemethod
     def ScrollIntoView(cls):
-        log.step_normal(u"Element [%s]: ScrollToView()" % cls.__name__)
+        log.step_normal("Element [%s]: ScrollToView()" % cls.__name__)
         
         cls.__wait()
         elements = env.threadlocal.BROWSER.find_elements(cls.by, cls.value)
@@ -260,7 +260,7 @@ class WebElement:
     
     @compatiblemethod
     def Set(cls, value):
-        log.step_normal(u"Element [%s]: Set [%s]." % (cls.__name__, value))
+        log.step_normal("Element [%s]: Set [%s]." % (cls.__name__, value))
         
         value = str(value)
         
@@ -639,7 +639,7 @@ class WebElement:
     def TypeIn(cls, value):
         '''Input value without clear existing values
         '''
-        log.step_normal(u"Element [%s]: TypeIn [%s]." % (cls.__name__, value))
+        log.step_normal("Element [%s]: TypeIn [%s]." % (cls.__name__, value))
         
         cls.__wait()
         elements = env.threadlocal.BROWSER.find_elements(cls.by, cls.value)
@@ -656,7 +656,7 @@ class WebElement:
     
     @compatiblemethod
     def SendEnter(cls):
-        log.step_normal(u"Element [%s]: SendEnter()" % (cls.__name__, ))
+        log.step_normal("Element [%s]: SendEnter()" % (cls.__name__, ))
         
         cls.__wait()
         elements = env.threadlocal.BROWSER.find_elements(cls.by, cls.value)
@@ -702,12 +702,12 @@ class WebElement:
     
     @compatiblemethod
     def GetInnerHTML(cls):
-        log.step_normal(u"Element [%s]: GetInnerHTML()" % (cls.__name__, ))
+        log.step_normal("Element [%s]: GetInnerHTML()" % (cls.__name__, ))
         
         cls.__wait()
         elements = env.threadlocal.BROWSER.find_elements(cls.by, cls.value)
         
-        log.step_normal(u"Element [%s]: InnerHTML = [%s]" % (cls.__name__, elements[cls.index].get_attribute('innerHTML')))
+        log.step_normal("Element [%s]: InnerHTML = [%s]" % (cls.__name__, elements[cls.index].get_attribute('innerHTML')))
         
         cls.__clearup()
         return elements[cls.index].get_attribute('innerHTML')
@@ -715,13 +715,13 @@ class WebElement:
     
     @compatiblemethod
     def GetAttribute(cls, attr):
-        log.step_normal(u"Element [%s]: GetAttribute [%s]." % (cls.__name__, attr))
+        log.step_normal("Element [%s]: GetAttribute [%s]." % (cls.__name__, attr))
         
         cls.__wait()
         elements = env.threadlocal.BROWSER.find_elements(cls.by, cls.value)
         
         attr_value = elements[cls.index].get_attribute(attr)
-        log.step_normal(u"Element [%s]: Attribute Value = [%s]." % (cls.__name__, attr_value))
+        log.step_normal("Element [%s]: Attribute Value = [%s]." % (cls.__name__, attr_value))
         
         cls.__clearup()
         return attr_value
@@ -739,7 +739,7 @@ class WebElement:
     @compatiblemethod
     def GetText(cls):
         elements = env.threadlocal.BROWSER.find_elements(cls.by, cls.value)
-        log.step_normal(u"Element [%s]: Gets the text of the element, the content is %s." % (cls.__name__, elements[cls.index].text))
+        log.step_normal("Element [%s]: Gets the text of the element, the content is %s." % (cls.__name__, elements[cls.index].text))
         return elements[cls.index].text
     
     
@@ -926,17 +926,17 @@ class WebElement:
     
     @compatiblemethod
     def IsEnabled(cls):
-        log.step_normal(u"Element [%s]: Is Enabled?" % (cls.__name__))
+        log.step_normal("Element [%s]: Is Enabled?" % (cls.__name__))
         
         cls.__wait()
         elements = env.threadlocal.BROWSER.find_elements(cls.by, cls.value)
         
         if elements[cls.index].is_enabled():
-            log.step_normal(u"Yes!")
+            log.step_normal("Yes!")
             cls.__clearup()
             return True
         else:
-            log.step_normal(u"No!")
+            log.step_normal("No!")
             cls.__clearup()
             return False
     
@@ -1080,13 +1080,13 @@ class WebElement:
     
     @compatiblemethod
     def VerifyEnabled(cls, trueOrfalse):
-        log.step_normal(u"Element [%s]: Verify Enabled = [%s]" % (cls.__name__, trueOrfalse))
+        log.step_normal("Element [%s]: Verify Enabled = [%s]" % (cls.__name__, trueOrfalse))
         
         cls.__wait()
         elements = env.threadlocal.BROWSER.find_elements(cls.by, cls.value)
         
         is_disabled = elements[cls.index].get_attribute("disabled")
-        log.step_normal(u"Element [%s]: attribute 'is_disabled' = [%s]" % (cls.__name__, is_disabled))
+        log.step_normal("Element [%s]: attribute 'is_disabled' = [%s]" % (cls.__name__, is_disabled))
         
         if is_disabled == "true":
             if trueOrfalse == False:

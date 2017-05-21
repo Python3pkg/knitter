@@ -8,8 +8,8 @@ try:
     from knitter import common
 except ImportError:
     # Python 2
-    import env
-    import common
+    from . import env
+    from . import common
 
 def html_source_header(title="Knitter Web Automation Test Result"):
     return """<!DOCTYPE HTML>
@@ -189,12 +189,12 @@ def html_source_end_table():
 """
 
 def html_source_version_info():
-    return u"""
+    return """
 <p style="text-align: center">%s</p>
 """ % common.get_version_info()
 
 def html_source_foot():
-    return u"""
+    return """
 <hr />
 <p style="text-align: center">2016 Powered by Knitter</p>
 <br />

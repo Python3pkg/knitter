@@ -14,9 +14,9 @@ try:
     from knitter import common
 except ImportError:
     # Python 2
-    import log
-    import env
-    import common
+    from . import log
+    from . import env
+    from . import common
 
 
 import threading

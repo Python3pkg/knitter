@@ -26,7 +26,7 @@ try:
     from knitter import log
 except ImportError:
     # Python 2
-    import log
+    from . import log
 
 
 class WindowFinder:
@@ -73,7 +73,7 @@ def send_keys_to_dialog(title=r".*Upload.*", key_valus=r""):
 
 
 if __name__ == "__main__":
-    send_keys_to_dialog(u"Open", r"E:\documents\Selenium.docx")
+    send_keys_to_dialog("Open", r"E:\documents\Selenium.docx")
 
 
 

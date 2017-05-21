@@ -14,9 +14,9 @@ try:
     from knitter import htmlreport
 except ImportError:
     # Python 2
-    import env
-    import common
-    import htmlreport
+    from . import env
+    from . import common
+    from . import htmlreport
 
 def generate_result_xls():
     wbk = xlwt.Workbook()
@@ -26,7 +26,7 @@ def generate_result_xls():
     style_bold  = xlwt.easyxf('font: colour black, bold True;')
     
     for m in env.EXCEL_REPORT_DATA:
-        if m.has_key("Name"):
+        if "Name" in m:
             sheet = wbk.add_sheet(m["Name"])
             
             sheet.write(0, 0, 'Test Case Name', style_bold)
@@ -44,19 +44,19 @@ def generate_result_xls():
             for case in m["TestCases"]:
                 sheet.write(i, 0, case["Name"])
                 
-                if case.has_key("IE"):
+                if "IE" in case:
                     if case["IE"] == "Pass":
                         sheet.write(i, 1, case["IE"], style_green)
                     if case["IE"] == "Fail":
                         sheet.write(i, 1, case["IE"], style_red)
                 
-                if case.has_key("Firefox"):
+                if "Firefox" in case:
                     if case["Firefox"] == "Pass":
                         sheet.write(i, 2, case["Firefox"], style_green)
                     if case["Firefox"] == "Fail":
                         sheet.write(i, 2, case["Firefox"], style_red)
                 
-                if case.has_key("Chrome"):
+                if "Chrome" in case:
                     if case["Chrome"] == "Pass":
                         sheet.write(i, 3, case["Chrome"], style_green)
                     if case["Chrome"] == "Fail":
@@ -118,11 +118,11 @@ def start_total_test():
     
     env.TOTAL_START_TIME = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
-    print  (">>>>>>  [%s]  =>  start testing......       <<<<<<" %
+    print((">>>>>>  [%s]  =>  start testing......       <<<<<<" %
               (
                env.TOTAL_START_TIME,
                )
-           )
+           ))
     
     htmlreport.generate_html_report([env.TOTAL_START_TIME, "N/A", "N/A", "N/A", "N/A", "N/A"], [])
     
@@ -141,7 +141,7 @@ def start_total_test():
 def finish_total_test():
     env.TOTAL_STOP_TIME = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
-    print (">>>>>>  [%s]  =>  [%s], duration [%s], case [%s], pass [%s], fail [%s]       <<<<<<" %
+    print((">>>>>>  [%s]  =>  [%s], duration [%s], case [%s], pass [%s], fail [%s]       <<<<<<" %
               (
                env.TOTAL_START_TIME,
                env.TOTAL_STOP_TIME,
@@ -150,11 +150,11 @@ def finish_total_test():
                env.TOTAL_TESTCASE_PASS,
                env.TOTAL_TESTCASE_FAIL,
                )
-            )
+            ))
     
-    print (
+    print((
            ">>>>>>  [%s]  =>  [%s]" % (env.TOTAL_START_TIME, common.get_version_info())
-           )
+           ))
     
     htmlreport.generate_html_report([env.TOTAL_START_TIME, env.TOTAL_STOP_TIME, datetime.datetime.strptime(env.TOTAL_STOP_TIME, "%Y-%m-%d %H:%M:%S") - datetime.datetime.strptime(env.TOTAL_START_TIME, "%Y-%m-%d %H:%M:%S"), 
                                      env.TOTAL_TESTCASE_PASS+env.TOTAL_TESTCASE_FAIL, env.TOTAL_TESTCASE_PASS, env.TOTAL_TESTCASE_FAIL], 
@@ -189,13 +189,13 @@ def stop_test():
             warning_message = ""
         
         if env.threadlocal.CASE_PASS == True:
-            print (u"%s    [Pass]  =>  [%s] [%s] [%s] [%s]%s" %(common.stamp_datetime(), 
+            print(("%s    [Pass]  =>  [%s] [%s] [%s] [%s]%s" %(common.stamp_datetime(), 
                                                         env.threadlocal.CASE_STOP_TIME - env.threadlocal.CASE_START_TIME, 
                                                         env.threadlocal.MODULE_NAME, 
                                                         env.threadlocal.CASE_NAME, 
                                                         env.threadlocal.TESTING_BROWSER,
                                                         warning_message
-                                                        ))
+                                                        )))
             env.TOTAL_TESTCASE_PASS = env.TOTAL_TESTCASE_PASS + 1
             
             env.HTMLREPORT_TESTCASES.append(["%s =&gt; %s" % (env.threadlocal.CASE_START_TIME.strftime("%m-%d %H:%M:%S"), env.threadlocal.CASE_STOP_TIME.strftime("%m-%d %H:%M:%S")),
@@ -206,13 +206,13 @@ def stop_test():
                                              ])
             
         else:
-            print (u"%s    [Fail]  =>  [%s] [%s] [%s] [%s]%s  :( " %(common.stamp_datetime(), 
+            print(("%s    [Fail]  =>  [%s] [%s] [%s] [%s]%s  :( " %(common.stamp_datetime(), 
                                                                  env.threadlocal.CASE_STOP_TIME - env.threadlocal.CASE_START_TIME, 
                                                                  env.threadlocal.MODULE_NAME, 
                                                                  env.threadlocal.CASE_NAME, 
                                                                  env.threadlocal.TESTING_BROWSER,
                                                                  warning_message
-                                                                 ))
+                                                                 )))
             env.TOTAL_TESTCASE_FAIL = env.TOTAL_TESTCASE_FAIL + 1
             
             env.HTMLREPORT_TESTCASES.append(["%s =&gt; %s" % (env.threadlocal.CASE_START_TIME.strftime("%m-%d %H:%M:%S"),env.threadlocal.CASE_STOP_TIME.strftime("%m-%d %H:%M:%S")),

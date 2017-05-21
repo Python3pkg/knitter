@@ -9,8 +9,8 @@ try:
     from knitter import env
 except ImportError:
     # Python 2
-    import log
-    import env
+    from . import log
+    from . import env
 
 
 def is_python_2():
@@ -39,7 +39,7 @@ def stamp_datetime_coherent():
 def exception_error():
     error_message = ""
     for i in range(len(inspect.trace())):
-        error_line = u"""
+        error_line = """
 File:      %s - [%s]
 Function:  %s
 Statement: %s
@@ -69,7 +69,7 @@ def add_unique_postfix(fn):
     
     '''
     if is_python_2():
-        fn = unicode(fn)
+        fn = str(fn)
     
     if not os.path.exists(fn):
         return fn
@@ -79,7 +79,7 @@ def add_unique_postfix(fn):
 
     make_fn = lambda i: os.path.join(path, '%s__%d%s' % (name, i, ext))
 
-    for i in range(2, sys.maxint):
+    for i in range(2, sys.maxsize):
         uni_fn = make_fn(i)
         if not os.path.exists(uni_fn):
             return uni_fn
@@ -224,7 +224,7 @@ def get_version_info():
     
     browser_version = ""
 #     for k, v in env.BROWSER_VERSION_INFO.iteritems():
-    for k, v in env.BROWSER_VERSION_INFO.items():
+    for k, v in list(env.BROWSER_VERSION_INFO.items()):
         browser_version += "%s - %s, " % (k, v)
     
     return "Version Info:  Python %s, %sKnitter %s, Selenium %s" % (python_version.split(" ")[0],

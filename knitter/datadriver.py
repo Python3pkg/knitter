@@ -10,8 +10,8 @@ try:
     from knitter import env
 except ImportError:
     # Python 2
-    import log
-    import env
+    from . import log
+    from . import env
 
 class ExcelSheet:
     def __init__(self, excel, sheet):
